@@ -1,5 +1,6 @@
-import { Schema, model, Document } from "mongoose";
+import mongoose, { Schema, model, Document } from "mongoose";
 import { Launch } from "./launch.types";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 type LaunchModelType = Launch & Document;
 
@@ -80,4 +81,9 @@ const launchSchema = new Schema<LaunchModelType>({
     id: String,
 });
 
-export default model<LaunchModelType>("Launch", launchSchema);
+launchSchema.plugin(mongoosePaginate);
+
+export default model<LaunchModelType, mongoose.PaginateModel<LaunchModelType>>(
+    "Launch",
+    launchSchema
+);
