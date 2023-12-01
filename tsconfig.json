@@ -1,37 +1,36 @@
 {
-  "ts-node": {
-    "require": [
-      "tsconfig-paths/register"
-    ]
-  },
-  "compilerOptions": {
-    "target": "es2016",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "module": "commonjs",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
+    "ts-node": {
+        "require": [
+            "tsconfig-paths/register"
+        ]
     },
-    "typeRoots": [
-      "node_modules/@types",
-      "src/@types"
+    "compilerOptions": {
+        "target": "es2016",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "module": "commonjs",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        },
+        "typeRoots": [
+            "node_modules/@types",
+            "src/@types"
+        ],
+        "outDir": "./dist/src",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "strictPropertyInitialization": false,
+        "skipLibCheck": true
+    },
+    "include": [
+        "src/**/*.ts"
     ],
-    "outDir": "./dist/src",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "strictPropertyInitialization": false,
-    "skipLibCheck": true
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/**/*.ts",
-  ],
-  "exclude": [
-    "node_modules",
-    "src/__tests__"
-  ]
+    "exclude": [
+        "node_modules",
+        "src/__tests__"
+    ]
 }
