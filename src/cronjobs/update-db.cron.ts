@@ -13,16 +13,16 @@ cron.schedule("0 9 * * *", async () => {
         const { data } = await api.get<LaunchApiResponse>("/");
 
         const launchRecordExists = await LaunchModel.exists({
-            id: data.id,
+            _id: data.id,
         });
 
         if (!launchRecordExists) {
             await LaunchModel.create(data);
-            console.log("Launch record already exists");
+            console.log("Launch inserted successfully");
             return;
         }
 
-        console.log("Launch inserted successfully");
+        console.log("Launch record already exists");
     } catch (error) {
         console.error(
             "Error when trying to insert record into database:",
