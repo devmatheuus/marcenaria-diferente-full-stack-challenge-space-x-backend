@@ -1,12 +1,14 @@
-import { Document } from "mongoose";
-
 interface CrewMember {
-    crew: string;
+    crew: {
+        id: string;
+    };
     role: string;
 }
 
 interface Core {
-    core: string;
+    core: {
+        id: string;
+    };
     flight: number;
     gridfins: boolean;
     legs: boolean;
@@ -14,7 +16,9 @@ interface Core {
     landing_attempt: boolean;
     landing_success: boolean;
     landing_type: string;
-    landpad: string;
+    landpad: {
+        id: string;
+    } | null;
 }
 
 interface Links {
@@ -39,22 +43,37 @@ interface Links {
     wikipedia: string;
 }
 
-interface Launch extends Document {
-    fairings: any;
+interface Failure {
+    time: number;
+    altitude: number;
+    reason: string;
+}
+
+interface Launch {
+    fairings: {
+        reused: boolean;
+        recovery_attempt: boolean;
+        recovered: boolean;
+        ships: string[];
+    };
     links: Links;
     static_fire_date_utc: string | null;
     static_fire_date_unix: number | null;
     net: boolean;
     window: number;
-    rocket: string;
+    rocket: {
+        id: string;
+    };
     success: boolean;
-    failures: any[];
+    failures: Failure[];
     details: string | null;
     crew: CrewMember[];
     ships: string[];
-    capsules: string[];
-    payloads: string[];
-    launchpad: string;
+    capsules: { id: string }[];
+    payloads: { id: string }[] | null;
+    launchpad: {
+        id: string;
+    } | null;
     flight_number: number;
     name: string;
     date_utc: string;

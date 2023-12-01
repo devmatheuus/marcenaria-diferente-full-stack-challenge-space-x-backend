@@ -1,7 +1,9 @@
 import { Schema, model, Document } from "mongoose";
 import { Launch } from "./launch.types";
 
-const launchSchema = new Schema<Launch>({
+type LaunchModelType = Launch & Document;
+
+const launchSchema = new Schema<LaunchModelType>({
     fairings: Schema.Types.Mixed,
     links: {
         patch: {
@@ -28,20 +30,26 @@ const launchSchema = new Schema<Launch>({
     static_fire_date_unix: Number,
     net: Boolean,
     window: Schema.Types.Mixed,
-    rocket: String,
+    rocket: {
+        id: String,
+    },
     success: Boolean,
     failures: [Schema.Types.Mixed],
     details: String,
     crew: [
         {
-            crew: String,
+            crew: {
+                id: String,
+            },
             role: String,
         },
     ],
     ships: [Schema.Types.Mixed],
-    capsules: [String],
-    payloads: [String],
-    launchpad: String,
+    capsules: [Schema.Types.Mixed],
+    payloads: [Schema.Types.Mixed],
+    launchpad: {
+        id: String,
+    },
     flight_number: Number,
     name: String,
     date_utc: String,
@@ -51,7 +59,9 @@ const launchSchema = new Schema<Launch>({
     upcoming: Boolean,
     cores: [
         {
-            core: String,
+            core: {
+                id: String,
+            },
             flight: Number,
             gridfins: Boolean,
             legs: Boolean,
@@ -59,7 +69,9 @@ const launchSchema = new Schema<Launch>({
             landing_attempt: Boolean,
             landing_success: Boolean,
             landing_type: String,
-            landpad: String,
+            landpad: {
+                id: String,
+            },
         },
     ],
     auto_update: Boolean,
@@ -68,4 +80,4 @@ const launchSchema = new Schema<Launch>({
     id: String,
 });
 
-export default model<Launch>("Launch", launchSchema);
+export default model<LaunchModelType>("Launch", launchSchema);
