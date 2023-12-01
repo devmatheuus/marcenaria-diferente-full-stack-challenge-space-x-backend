@@ -1,14 +1,14 @@
+interface Identifier {
+    id: string;
+}
+
 interface CrewMember {
-    crew: {
-        id: string;
-    };
+    crew: Identifier;
     role: string;
 }
 
 interface Core {
-    core: {
-        id: string;
-    };
+    core: Identifier;
     flight: number;
     gridfins: boolean;
     legs: boolean;
@@ -16,9 +16,7 @@ interface Core {
     landing_attempt: boolean;
     landing_success: boolean;
     landing_type: string;
-    landpad: {
-        id: string;
-    } | null;
+    landpad: Identifier | null;
 }
 
 interface Links {
@@ -45,8 +43,12 @@ interface Links {
 
 interface Failure {
     time: number;
-    altitude: number;
+    altitude: number | null;
     reason: string;
+}
+
+interface LaunchPayload {
+    id: string;
 }
 
 interface Launch {
@@ -61,19 +63,15 @@ interface Launch {
     static_fire_date_unix: number | null;
     net: boolean;
     window: number;
-    rocket: {
-        id: string;
-    };
+    rocket: Identifier;
     success: boolean;
-    failures: Failure[];
+    failures: Failure[] | null;
     details: string | null;
     crew: CrewMember[];
     ships: string[];
-    capsules: { id: string }[];
-    payloads: { id: string }[] | null;
-    launchpad: {
-        id: string;
-    } | null;
+    capsules: LaunchPayload[];
+    payloads: LaunchPayload[] | null;
+    launchpad: Identifier | null;
     flight_number: number;
     name: string;
     date_utc: string;
@@ -81,11 +79,30 @@ interface Launch {
     date_local: string;
     date_precision: string;
     upcoming: boolean;
-    cores: Core[];
+    cores: Core[] | null;
     auto_update: boolean;
     tbd: boolean;
     launch_library_id: string;
     id: string;
 }
 
-export { Launch, CrewMember, Core, Links };
+type LaunchApiResponse = Omit<
+    Launch,
+    "rocket" | "capsules" | "launchpad" | "cores"
+> & {
+    rocket: string;
+    capsules: string[];
+    launchpad: string;
+    cores: Omit<Core, "landpad"> & { landpad: string }[];
+};
+
+export {
+    Launch,
+    CrewMember,
+    Core,
+    Links,
+    LaunchApiResponse,
+    Identifier,
+    Failure,
+    LaunchPayload,
+};
