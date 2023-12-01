@@ -6,12 +6,18 @@ type RocketIds = {
     [key: string]: string;
 };
 
-export const getLaunchesStatsService = async () => {
+type OptionalQueryParam = Partial<{
+    returnLaunchDataByYear: boolean;
+}>;
+
+export const getLaunchesStatsService = async ({
+    returnLaunchDataByYear = false,
+}: OptionalQueryParam) => {
     const topRocketLaunches = await getTopRocketLaunches();
     const rocketsIds = topRocketLaunches.map((rocket) => rocket._id);
 
     const topRocketDetails = await getLaunchStatusCounts(topRocketLaunches);
     const launchesByYear = await getLaunchesByYear(rocketsIds);
 
-    return launchesByYear;
+    return returnLaunchDataByYear ? launchesByYear : topRocketDetails;
 };
