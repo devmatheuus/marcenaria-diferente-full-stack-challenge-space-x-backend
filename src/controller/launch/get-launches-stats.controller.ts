@@ -5,18 +5,7 @@ export const getLaunchesStatsController = async (
     req: Request,
     res: Response
 ) => {
-    let returnLaunchDataByYear = false;
-
-    if (
-        req.query?.returnLaunchDataByYear &&
-        req.query.returnLaunchDataByYear === "true"
-    ) {
-        returnLaunchDataByYear = true;
-    }
-
-    const launchesData = await getLaunchesStatsService({
-        returnLaunchDataByYear,
-    });
+    const launchesData = await getLaunchesStatsService();
 
     res.json(launchesData);
 };
