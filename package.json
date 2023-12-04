@@ -7,7 +7,8 @@
         "dev": "nodemon --watch src/**/**/*.ts --ignore src/**/*.spec.ts --exec ts-node src/server.ts",
         "start:cronjob": "ts-node ./src/cronjobs/update-db.cron.ts",
         "build": "tsc && cp ./tsconfig.json ./dist/ && cp ./src/docs.yml ./dist/src/",
-        "start:production": "npm run build && node -r module-alias/register -r tsconfig-paths/register ./node_modules/ts-node/dist/bin.js --project ./dist/tsconfig.json ./dist/src/server.js",
+        "start:prod": "npm run build && node -r module-alias/register -r tsconfig-paths/register ./node_modules/ts-node/dist/bin.js --project ./dist/tsconfig.json ./dist/src/server.js",
+        "start:prod-with-cron": "npm run build && node -r module-alias/register -r tsconfig-paths/register ./node_modules/ts-node/dist/bin.js --project ./dist/tsconfig.json ./dist/src/server.js && npm run start:cronjob",
         "seed": "ts-node ./src/database/seed.ts"
     },
     "keywords": [],
