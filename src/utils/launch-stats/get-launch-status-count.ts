@@ -1,4 +1,5 @@
 import LaunchModel from "@/Models/Launch/Launch";
+import { AppError } from "@/errors/app-error";
 
 type LaunchResult = {
     _id: string;
@@ -83,7 +84,7 @@ export const getLaunchStatusCounts = async (
                     },
                 },
             },
-            { $sort: { successful: -1, "launches.launchYear": 1 } }, // Adiciona esta etapa para ordenar os resultados
+            { $sort: { successful: -1, "launches.launchYear": 1 } },
         ]);
 
         return launchResults.map((launch) => ({
@@ -94,6 +95,6 @@ export const getLaunchStatusCounts = async (
             launches: launch.launches,
         }));
     } catch (error) {
-        throw new Error("Error getting launch status counts");
+        throw new AppError(400, "Error getting launch status counts");
     }
 };
