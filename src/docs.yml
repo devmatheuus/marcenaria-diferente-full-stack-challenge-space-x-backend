@@ -1,0 +1,154 @@
+openapi: 3.0.0
+
+info:
+    description: |-
+        <div align="center">
+          <h1 align="center">Space X - API</h1>
+
+          <h3 align="center">Version: 1.0.0</h3>
+
+          <p align="center">
+            Documentação contendo todas as rotas da API Space X
+          </p>
+        </div>
+tags:
+    - name: Launches
+      description: Rotas que retornam informações sobre os lançamentos da Space X
+
+servers:
+    - url: http://localhost:4000
+      description: Desenvolvimento
+
+paths:
+    /launches:
+        get:
+            tags:
+                - Launches
+            description: |-
+                <h2>Descrição</h2>
+                <p>
+                  A rota retorna uma lista paginada com os lançamentos da Space X. Ela aceita os seguintes parâmetros de rota: <br>
+                  <ul>
+                    <li><b>limit</b>: Quantidade de lançamentos por página</li>
+                    <li><b>search</b>: Filtrar por nome da missão</li>
+                    <li><b>page</b>: Ir para a página solicitada</li>
+                  </ul>
+                  <p>Todos os parâmetros são opcionais.</p>
+                </p>
+
+                <h2>Exemplo de requisição com parâmetro</h2>
+                <p>http://localhost:4000/launches?limit=10&search=starlink&page=1</p>
+            parameters:
+                - name: limit
+                  in: query
+                  required: false
+                  description: Quantidade de lançamentos por página
+                  schema:
+                      type: integer
+                - name: search
+                  in: query
+                  required: false
+                  description: Filtrar por nome da missão
+                  schema:
+                      type: string
+                - name: page
+                  in: query
+                  required: false
+                  description: Ir para a página solicitada
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Lista de lançamentos retornada com sucesso
+                    content:
+                        application/json:
+                            example:
+                                results:
+                                    links:
+                                        patch:
+                                            small: "https://images2.imgbox.com/ab/5a/Pequxd5d_o.png"
+                                            large: "https://images2.imgbox.com/92/e4/7Cf6MLY0_o.png"
+                                        reddit:
+                                            campaign: null
+                                            launch: null
+                                            media: null
+                                            recovery: null
+                                        flickr:
+                                            small: []
+                                            original: []
+                                        presskit: "http://www.spacex.com/press/2012/12/19/spacexs-falcon-1-successfully-delivers-razaksat-satellite-orbit"
+                                        webcast: "https://www.youtube.com/watch?v=yTaIDooc8Og"
+                                        youtube_id: "yTaIDooc8Og"
+                                        article: "http://www.spacex.com/news/2013/02/12/falcon-1-flight-5"
+                                        wikipedia: "https://en.wikipedia.org/wiki/RazakSAT"
+                                    rocket:
+                                        id: "5e9d0d95eda69955f709d1eb"
+                                    launchpad:
+                                        id: "5e9e4502f5090995de566f86"
+                                    _id: "656a1d1d699d1c786688e9f7"
+                                    fairings:
+                                        reused: false
+                                        recovery_attempt: false
+                                        recovered: false
+                                        ships: []
+                                    static_fire_date_utc: null
+                                    static_fire_date_unix: null
+                                    net: false
+                                    window: 0
+                                    success: true
+                                    failures: []
+                                    details: null
+                                    crew: []
+                                    ships: []
+                                    capsules: []
+                                    payloads:
+                                        - id: "5eb0e4b7b6c3bb0006eeb1e6"
+                                    flight_number: 5
+                                    name: "RazakSat"
+                                    date_utc: "2009-07-13T03:35:00.000Z"
+                                    date_unix: 1247456100
+                                    date_local: "2009-07-13T15:35:00+12:00"
+                                    date_precision: "hour"
+                                    upcoming: false
+                                    cores:
+                                        - landpad:
+                                              id: null
+                                          flight: 1
+                                          gridfins: false
+                                          legs: false
+                                          reused: false
+                                          landing_attempt: false
+                                          landing_success: null
+                                          landing_type: null
+                                          _id: "656a1d1d699d1c786688e9f8"
+                                    auto_update: true
+                                    tbd: false
+                                    launch_library_id: null
+                                    id: "5eb87cdcffd86e000604b32e"
+                                    __v: 0
+                                totalDocs: 205
+                                page: 1
+                                totalPages: 52
+                                hasNext: true
+                                hasPrev: false
+    /launches/stats:
+        get:
+            tags:
+                - Launches
+            description: |-
+                <h2>Descrição</h2>
+                <p>
+                A rota retorna as estatísticas dos lançamentos da Space X. Ela aceita os seguintes parâmetros de rota: <br>
+                </p>
+            responses:
+                "200":
+                    description: Estatísticas retornadas com sucesso
+                    content:
+                        application/json:
+                            example:
+                                - rocketName: "Falcon 9 Test Flight"
+                                  successful: 19
+                                  failed: 1
+                                  launches:
+                                    - launchYear: 2006
+                                      launchCount: 1
