@@ -6,6 +6,7 @@ import express from "express";
 import cors from "cors";
 import { initializeMongoConnection } from "./database/mongo";
 import { appRoutes } from "./routes/index.routes";
+import { globalErrorMiddleware } from "./middlewares/global-error.middleware";
 
 const app = express();
 const PORT = process.env.PORT ?? 4000;
@@ -15,6 +16,7 @@ initializeMongoConnection();
 app.use(cors());
 app.use(express.json());
 appRoutes(app);
+app.use(globalErrorMiddleware);
 
 app.get("/", (req, res) => {
     return res.json({
