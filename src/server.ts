@@ -8,7 +8,7 @@ import { initializeMongoConnection } from "./database/mongo";
 import { appRoutes } from "./routes/index.routes";
 
 const app = express();
-const PORT = process.env.PORT ?? 3000;
+const PORT = process.env.PORT ?? 4000;
 
 initializeMongoConnection();
 
