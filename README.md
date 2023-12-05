@@ -20,7 +20,7 @@ Este é o backend de uma aplicação que faz parte de um desafio técnico. O pro
 
 ### Instruções para executar o projeto
 
-_Existem duas formas de executar o projeto:_
+_Existem três formas de executar o projeto:_
 
 -   _Executando o projeto localmente com Docker_
 -   _Executando o projeto localmente de forma manual_
