@@ -20,7 +20,7 @@ Este é o backend de uma aplicação que faz parte de um desafio técnico. O pro
 
 ### Instruções para executar o projeto
 
-_Existem duas formas de executar o projeto:_
+_Existem três formas de executar o projeto:_
 
 -   _Executando o projeto localmente com Docker_
 -   _Executando o projeto localmente de forma manual_
@@ -51,7 +51,7 @@ docker-compose up
 _Durante o processo, o banco de dados será alimentado de forma automática._
 
 
-_Quando o processo terminar, a aplicação estará sendo executa na porta indicada no valor da variável PORT do arquivo .env. Caso não seja especificada, a aplicação estará em funcionamento na porta 4000._
+_Quando o processo terminar, a aplicação estará sendo executada na porta indicada no valor da variável PORT do arquivo .env. Caso não seja especificada, a aplicação estará em funcionamento na porta 4000._
 
 ### Executando o projeto localmente de forma manual
 -  _Clone o repositório_
@@ -87,7 +87,7 @@ npm run seed
 npm run dev
 ```
 
-_Quando o processo terminar, a aplicação estará sendo executa na porta indicada no valor da variável PORT do arquivo .env. Caso não seja especificada, a aplicação estará em funcionamento na porta 4000._
+_Quando o processo terminar, a aplicação estará sendo executada na porta indicada no valor da variável PORT do arquivo .env. Caso não seja especificada, a aplicação estará em funcionamento na porta 4000._
 
 
 ### Acessando a URL de deploy
