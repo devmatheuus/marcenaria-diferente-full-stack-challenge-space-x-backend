@@ -18,6 +18,8 @@ tags:
 servers:
     - url: http://localhost:4000
       description: Desenvolvimento
+    - url: https://marcenaria-diferente-full-stack.onrender.com
+      description: Produção
 
 paths:
     /launches:
@@ -150,5 +152,5 @@ paths:
                                   successful: 19
                                   failed: 1
                                   launches:
-                                    - launchYear: 2006
-                                      launchCount: 1
+                                      - launchYear: 2006
+                                        launchCount: 1
