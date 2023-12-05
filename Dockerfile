@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm run seed
+
 RUN npm run build
 
 EXPOSE 4000
