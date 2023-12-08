@@ -1,65 +1,55 @@
 import { createReadStream } from "fs";
-
 import { LaunchRecord } from "./launch-record.type";
 import { pipelineAsync } from "@/utils/pipelineAsync";
-import { Writable, Transform } from "stream";
+import { Transform, Writable } from "stream";
 //@ts-ignore
 import JSONStream from "JSONStream";
 import { initializeMongoConnection } from "./mongo";
 import LaunchModel from "@/Models/Launch/Launch";
 import { Launch } from "@/Models/Launch/launch.types";
-import mongoose from "mongoose";
+import { normalizeChunk } from "../utils/seed/normalizeChunk";
 
 const FILE_PATH = __dirname + "/data/seed.json";
+
+initializeMongoConnection();
+
+const batchInsertSize = 100;
+
+let batch: any[] = [];
 
 const readStream = createReadStream(FILE_PATH);
 const normalizeDataStream = JSONStream.parse("*");
 
-initializeMongoConnection();
-
 const processObjectStream = new Transform({
     objectMode: true,
     transform(chunk: LaunchRecord, encoding, callback) {
-        const { _id, __v, ...rest } = chunk;
+        const normalizedChunk = normalizeChunk(chunk);
+        batch.push(normalizedChunk);
 
-        const normalizedChunk = {
-            ...rest,
-            id: _id.$oid,
-            rocket: {
-                id: rest.rocket.$oid,
-            },
-            payloads: rest.payloads
-                ? rest.payloads.map((payload) => ({
-                      id: payload.$oid,
-                  }))
-                : null,
-            launchpad: rest.launchpad
-                ? {
-                      id: rest.launchpad.$oid,
-                  }
-                : null,
+        if (batch.length >= batchInsertSize) {
+            this.push([...batch]);
+            batch = [];
+        }
 
-            cores:
-                rest.cores &&
-                rest.cores.map((core) => ({
-                    ...core,
-                    id: core.core?.$oid,
-                    landpad: {
-                        id: core.landpad?.$oid || null,
-                    },
-                })),
-        };
+        callback();
+    },
 
-        callback(null, normalizedChunk);
+    flush(callback) {
+        if (batch.length > 0) {
+            this.push([...batch]);
+            batch = [];
+        }
+
+        callback();
     },
 });
 
 const saveToDatabaseStream = new Writable({
     objectMode: true,
-    async write(chunk: Launch, encoding, callback) {
+    async write(batch: Launch[], encoding, callback) {
         try {
-            await LaunchModel.create(chunk);
-            console.log("Saved to database", chunk.id);
+            console.log("Saving to database");
+            await LaunchModel.insertMany(batch);
             callback();
         } catch (error: any) {
             callback(error);
@@ -75,9 +65,9 @@ pipelineAsync(
 )
     .catch((err) => {
         console.error(err);
+        process.exit(1);
     })
     .finally(() => {
-        mongoose.connection.close();
-        console.log("Done!");
+        console.log("Done");
         process.exit(0);
     });
