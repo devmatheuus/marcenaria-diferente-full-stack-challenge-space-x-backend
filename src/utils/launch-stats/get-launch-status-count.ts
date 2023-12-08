@@ -1,5 +1,6 @@
 import LaunchModel from "@/Models/Launch/Launch";
 import { AppError } from "@/errors/app-error";
+import redis from "@/lib/redis-client";
 
 type LaunchResult = {
     _id: string;
@@ -17,6 +18,14 @@ type LaunchStatusReturn = {
 export const getLaunchStatusCounts = async (
     topRocketLaunches: LaunchResult[]
 ): Promise<LaunchStatusReturn[]> => {
+    const cachedData = await redis.get(
+        process.env.REDIS_KEY_GET_LAUNCH_STATUS_COUNTS
+    );
+
+    if (cachedData) {
+        return JSON.parse(cachedData) as LaunchStatusReturn[];
+    }
+
     const rocketIds = topRocketLaunches.map((rocket) => rocket._id);
 
     try {
@@ -87,13 +96,21 @@ export const getLaunchStatusCounts = async (
             { $sort: { successful: -1, "launches.launchYear": 1 } },
         ]);
 
-        return launchResults.map((launch) => ({
+        const response = launchResults.map((launch) => ({
             id: launch.id,
             rocketName: launch.rocketName,
             successful: launch.successful,
             failed: launch.failed,
             launches: launch.launches,
         }));
+
+        redis.setex(
+            process.env.REDIS_KEY_GET_LAUNCH_STATUS_COUNTS as string,
+            86400,
+            JSON.stringify(response)
+        );
+
+        return response;
     } catch (error) {
         throw new AppError(400, "Error getting launch status counts");
     }
