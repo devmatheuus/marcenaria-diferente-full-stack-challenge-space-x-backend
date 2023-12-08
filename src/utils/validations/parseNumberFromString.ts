@@ -7,7 +7,7 @@ export const parseNumberFromString = (
 
     const parsedValue = Number(value);
 
-    if (!isNaN(parsedValue) && isFinite(parsedValue)) {
+    if (!isNaN(parsedValue) && isFinite(parsedValue) && parsedValue > 0) {
         return parsedValue;
     }
 
