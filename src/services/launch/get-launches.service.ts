@@ -1,6 +1,9 @@
 import LaunchModel from "@/Models/Launch/Launch";
+import redis from "@/lib/redis-client";
+import { addToDynamicKeyToCacheList } from "@/utils/redis/addDynamicCacheKeyToCacheList";
+import { generateDynamicCacheKey } from "@/utils/redis/generateDynamicCacheKey";
 
-type GetLaunchServiceOptionsParams = Partial<{
+export type GetLaunchServiceOptionsParams = Partial<{
     page: number;
     limit: number;
     search: string;
@@ -11,6 +14,14 @@ export const getLaunchesService = async ({
     search,
     page = 1,
 }: GetLaunchServiceOptionsParams) => {
+    const cacheKey = generateDynamicCacheKey({ limit, search, page });
+
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+
     const query = search
         ? {
               $or: [
@@ -35,6 +46,10 @@ export const getLaunchesService = async ({
         hasNext: hasNextPage,
         hasPrev: hasPrevPage,
     };
+
+    await redis.setex(cacheKey, 86400, JSON.stringify(launches));
+
+    await addToDynamicKeyToCacheList(cacheKey);
 
     return launches;
 };
