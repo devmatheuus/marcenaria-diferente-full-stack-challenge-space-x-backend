@@ -4,5 +4,21 @@ services:
   app:
     container_name: app
     build: ./
+    depends_on:
+      - redis
+    links:
+      - redis
     ports:
       - 4000:4000
+    volumes:
+        - ./:/app
+        - /app/node_modules
+  redis:
+    image: bitnami/redis:latest
+    container_name: redis
+    expose:
+      - 6379
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      
+
